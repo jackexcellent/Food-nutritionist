@@ -37,3 +37,4 @@ def analyze_food(image_url, food_labels=None):
         return {label: prob.item() for label, prob in zip(food_labels, probs[0])}
     except Exception as e:
         raise Exception(f"圖像辨識錯誤：{str(e)}")
+    
