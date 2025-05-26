@@ -1,6 +1,8 @@
 import discord
 from discord.ext import commands
 import requests
+from dotenv import load_dotenv
+
 
 
 intents = discord.Intents.default()
@@ -16,4 +18,6 @@ async def on_ready():
 async def hello(ctx):
     await ctx.send(f'嗨嗨 {ctx.author.name}，我是你的食物營養師 💖')
 
-bot.run('MTM1NTUyMjcxOTY1OTMzMTU5NA.GcVI2O.J4G4a68uF4DCTtMTrKYlPtfiKCZ9CXJN7CwELI')
+load_dotenv()  # 讀取 .env 檔案
+TOKEN = os.getenv("DISCORD_TOKEN")
+bot.run(TOKEN)
