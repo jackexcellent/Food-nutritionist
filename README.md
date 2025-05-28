@@ -3,13 +3,17 @@
 
 **檔案結構 :**
 
->food_bot
+food_bot
 
->>├── discord_bot.py
->>├── image_recognition.py
->>├── llm_groq.py
->>├── nutrition_cache.json
->>├── recommendation_cache.json
+: ├── discord_bot.py
+
+: ├── image_recognition.py
+
+: ├── llm_groq.py
+
+: ├── nutrition_cache.json
+
+: ├── recommendation_cache.json
 
 
 功能分工 :
