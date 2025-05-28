@@ -6,13 +6,9 @@
 >food_bot
 
 >>├── discord_bot.py
-
 >>├── image_recognition.py
-
 >>├── llm_groq.py
-
 >>├── nutrition_cache.json
-
 >>├── recommendation_cache.json
 
 
