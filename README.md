@@ -19,3 +19,5 @@ food_bot/
     llm_groq.py：使用 Groq API 生成飲食建議，優化提示以支援繁體中文和台灣飲食文化，包含快取機制減少 API 呼叫。
 
     HIIII
+
+    HIIIII2
