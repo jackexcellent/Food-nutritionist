@@ -2,7 +2,7 @@ from ultralytics import YOLO
 import cv2
 
 # 載入模型
-model = YOLO("yolov8n.pt")  # 確保檔案存在於同資料夾
+model = YOLO("best.pt")  # 確保檔案存在於同資料夾
 
 # 讀取圖片
 image_path = "PIZZA.png"  # 替換為你的圖片檔名
