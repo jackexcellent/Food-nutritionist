@@ -1,7 +1,7 @@
 from ultralytics import YOLO
 
 # 載入模型
-model = YOLO("yolov8n.pt")  # 替換為你的 .pt 檔案路徑
+model = YOLO("yolov5s6.pt")  # 替換為你的 .pt 檔案路徑
 
 # 獲取類別名稱
 class_names = model.names
