@@ -22,10 +22,14 @@ genai.configure(api_key=GEMINI_API_KEY)
 
 # 本地快取檔案
 RECOMMENDATION_CACHE_FILE = os.path.join(BASE_DIR, "recommendation_cache.json")
+QUESTION_CACHE_FILE = os.path.join(BASE_DIR, "question_cache.json")
 
 # 初始化快取檔案
 if not os.path.exists(RECOMMENDATION_CACHE_FILE):
     with open(RECOMMENDATION_CACHE_FILE, "w", encoding="utf-8") as f:
+        json.dump({}, f)
+if not os.path.exists(QUESTION_CACHE_FILE):
+    with open(QUESTION_CACHE_FILE, "w", encoding="utf-8") as f:
         json.dump({}, f)
 
 def generate_diet_recommendation(nutrition_summary, goal="healthy"):
@@ -61,7 +65,7 @@ def generate_diet_recommendation(nutrition_summary, goal="healthy"):
 
     # Gemini API 呼叫
     try:
-        model = genai.GenerativeModel("gemini-1.5-pro")  # 更新為有效模型
+        model = genai.GenerativeModel("gemini-1.5-pro")
         response = model.generate_content(
             prompt,
             generation_config={
@@ -79,3 +83,53 @@ def generate_diet_recommendation(nutrition_summary, goal="healthy"):
         return recommendation
     except Exception as e:
         return f"Gemini API 錯誤：{str(e)}"
+
+def answer_question(question):
+    """
+    使用 Google Gemini API 回答用戶問題，優化為繁體中文，適合台灣年輕人。
+    
+    Args:
+        question (str): 用戶輸入的問題。
+    
+    Returns:
+        str: 回答，或錯誤訊息。
+    """
+    # 構建提示
+    prompt = (
+        "你是一位知識淵博的助手，專精台灣文化，使用繁體中文，語氣親切，適合台灣年輕人。請回答以下問題，答案簡潔且不超過150字：\n"
+        f"問題：{question}"
+        # question
+    )
+
+    # 檢查快取
+    with open(QUESTION_CACHE_FILE, "r", encoding="utf-8") as f:
+        cache = json.load(f)
+    cache_key = f"{prompt}"
+    if cache_key in cache:
+        return cache[cache_key]
+
+    # Gemini API 呼叫
+    try:
+        model = genai.GenerativeModel("gemini-2.0-flash")
+        response = model.generate_content(
+            prompt,
+            generation_config={
+                "max_output_tokens": 150,
+                "temperature": 0.7
+            }
+        )
+        answer = response.text.strip()
+
+        # 儲存到快取
+        cache[cache_key] = answer
+        with open(QUESTION_CACHE_FILE, "w", encoding="utf-8") as f:
+            json.dump(cache, f, indent=2, ensure_ascii=False)
+
+        return answer
+    except Exception as e:
+        return f"Gemini API 錯誤：{str(e)}"
+
+
+# inp = input("請輸入問題：")
+# answer = answer_question(inp)
+# print(answer)

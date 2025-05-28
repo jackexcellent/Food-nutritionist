@@ -3,7 +3,7 @@ from discord.ext import commands
 import requests
 from dotenv import load_dotenv
 import os
-from llm_gemini import generate_diet_recommendation
+from llm_gemini import *
 
 # 獲取當前腳本的目錄
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -100,6 +100,35 @@ async def analyze(ctx, goal="healthy"):
             await ctx.send(f"⚠️ 後端分析失敗（狀態碼：{response.status_code}）")
     except Exception as e:
         await ctx.send(f"❌ 發生錯誤：無法連線到後端伺服器\n錯誤資訊：`{str(e)}`")
+        
+        
+@bot.command()
+async def ask(ctx, *, question):
+    """
+    回答用戶在 Discord 輸入的問題，使用 Gemini LLM。
+    
+    Args:
+        ctx: Discord 上下文。
+        question (str): 用戶的問題。
+    """
+    if not question:
+        await ctx.send("⚠️ 請輸入問題！（例如：`!ask 如何健康飲食？`）")
+        return
+
+    await ctx.send("正在思考您的問題...🤔")
+    try:
+        answer = answer_question(question)
+        embed = discord.Embed(
+            title="💬 問題解答",
+            description=answer,
+            color=0x87CEEB
+        )
+        # embed.add_field(name="問題", value=question, inline=False)
+        # embed.set_footer(text="由食物營養師助手回答 ✨")
+        await ctx.send(embed=embed)
+    except Exception as e:
+        await ctx.send(f"❌ 回答問題時發生錯誤：{str(e)}")
+        
 
 # 運行 Bot
 TOKEN = os.getenv("DISCORD_BOT_API_KEY")
