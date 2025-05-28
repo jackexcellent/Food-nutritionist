@@ -1,42 +1,42 @@
-from PIL import Image
-import io
-import requests
-from transformers import *
-import torch
+# from PIL import Image
+# import io
+# import requests
+# from transformers import *
+# import torch
 
-# 載入圖像辨識模型
-image_model = AutoModelForImageClassification.from_pretrained("nateraw/food")
-image_processor = AutoProcessor.from_pretrained("nateraw/food")
+# # 載入圖像辨識模型
+# image_model = AutoModelForImageClassification.from_pretrained("nateraw/food")
+# image_processor = AutoProcessor.from_pretrained("nateraw/food")
 
-def analyze_food(image_url, food_labels=None):
-    """
-    使用 nateraw/food 模型分析食物照片，返回辨識結果。
+# def analyze_food(image_url, food_labels=None):
+#     """
+#     使用 nateraw/food 模型分析食物照片，返回辨識結果。
     
-    Args:
-        image_url (str): 圖片 URL。
-        food_labels (list): 食物標籤列表（可選，若為 None 則使用模型預設標籤）。
+#     Args:
+#         image_url (str): 圖片 URL。
+#         food_labels (list): 食物標籤列表（可選，若為 None 則使用模型預設標籤）。
     
-    Returns:
-        dict: 食物標籤和機率，例如 {"pizza": 0.8, "burger": 0.15}。
-    """
-    try:
-        # 下載並處理圖片
-        response = requests.get(image_url)
-        image = Image.open(io.BytesIO(response.content)).convert("RGB")
-        inputs = image_processor(images=image, return_tensors="pt")
+#     Returns:
+#         dict: 食物標籤和機率，例如 {"pizza": 0.8, "burger": 0.15}。
+#     """
+#     try:
+#         # 下載並處理圖片
+#         response = requests.get(image_url)
+#         image = Image.open(io.BytesIO(response.content)).convert("RGB")
+#         inputs = image_processor(images=image, return_tensors="pt")
 
-        # 模型推理
-        with torch.no_grad():
-            outputs = image_model(**inputs.to("cuda" if torch.cuda.is_available() else "cpu"))
-        probs = outputs.logits.softmax(dim=1)
+#         # 模型推理
+#         with torch.no_grad():
+#             outputs = image_model(**inputs.to("cuda" if torch.cuda.is_available() else "cpu"))
+#         probs = outputs.logits.softmax(dim=1)
 
-        # 使用模型預設標籤或自定義標籤
-        if food_labels is None:
-            food_labels = list(image_model.config.id2label.values())
+#         # 使用模型預設標籤或自定義標籤
+#         if food_labels is None:
+#             food_labels = list(image_model.config.id2label.values())
         
-        return {label: prob.item() for label, prob in zip(food_labels, probs[0])}
-    except Exception as e:
-        raise Exception(f"圖像辨識錯誤：{str(e)}")
+#         return {label: prob.item() for label, prob in zip(food_labels, probs[0])}
+#     except Exception as e:
+#         raise Exception(f"圖像辨識錯誤：{str(e)}")
     
     
 from PIL import Image
