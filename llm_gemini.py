@@ -50,7 +50,12 @@ def generate_diet_recommendation(nutrition_summary, goal="healthy"):
         "餐點分析：\n"
     )
     for item in nutrition_summary:
-        prompt += f"- {item['food']}：{item['calories']} kcal，{item['carbs']}g 碳水化合物，{item['protein']}g 蛋白質，{item['fat']}g 脂肪\n"
+        # 處理可能的缺失營養數據
+        calories = item.get("calories", "未知")
+        carbs = item.get("carbs", "未知")
+        protein = item.get("protein", "未知")
+        fat = item.get("fat", "未知")
+        prompt += f"- {item['food']}：熱量 {calories} kcal，碳水化合物 {carbs}g，蛋白質 {protein}g，脂肪 {fat}g\n"
     if goal == "healthy":
         prompt += "建議如何平衡今日剩餘飲食，保持健康，考慮台灣飲食習慣。"
     elif goal == "weight_loss":
@@ -65,7 +70,7 @@ def generate_diet_recommendation(nutrition_summary, goal="healthy"):
 
     # Gemini API 呼叫
     try:
-        model = genai.GenerativeModel("gemini-1.5-pro")
+        model = genai.GenerativeModel("gemini-2.0-flash")
         response = model.generate_content(
             prompt,
             generation_config={
@@ -98,7 +103,6 @@ def answer_question(question):
     prompt = (
         "你是一位知識淵博的助手，專精台灣文化，使用繁體中文，語氣親切，適合台灣年輕人。請回答以下問題，答案簡潔且不超過150字：\n"
         f"問題：{question}"
-        # question
     )
 
     # 檢查快取
@@ -128,8 +132,3 @@ def answer_question(question):
         return answer
     except Exception as e:
         return f"Gemini API 錯誤：{str(e)}"
-
-
-# inp = input("請輸入問題：")
-# answer = answer_question(inp)
-# print(answer)
