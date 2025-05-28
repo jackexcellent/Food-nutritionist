@@ -3,24 +3,25 @@ import os
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-# # 載入環境變數
-# load_dotenv()
+# 獲取當前腳本的目錄
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-# # 嘗試載入 api.env 或 .env
-# env_file = "api.env" if os.path.exists("api.env") else ".env"
-# if not load_dotenv(env_file):
-#     raise FileNotFoundError(f"錯誤：無法找到 {env_file} 檔案，請確認檔案存在於 food_bot 目錄。")
+# 載入環境變數
+env_file = os.path.join(BASE_DIR, "test.env" if os.path.exists(os.path.join(BASE_DIR, "test.env")) else ".env")
+if not os.path.exists(env_file):
+    raise FileNotFoundError(f"錯誤：無法找到 {env_file} 檔案，請確認檔案存在於 {BASE_DIR} 目錄。")
+if not load_dotenv(env_file):
+    raise RuntimeError(f"錯誤：無法載入 {env_file} 檔案，請檢查檔案格式或權限。")
 
 # Gemini API 配置
-# GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-GEMINI_API_KEY = "AIzaSyAu2-zO04EA_UPy_xJ568hnOc9JUgBlbMI"
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 if not GEMINI_API_KEY:
-    raise ValueError("錯誤：未找到 GEMINI_API_KEY，請在 .env 檔案中設置或提供有效的 API Key。")
+    raise ValueError("錯誤：未找到 GEMINI_API_KEY，請在 test.env 或 .env 檔案中設置正確的 API Key。")
 
 genai.configure(api_key=GEMINI_API_KEY)
 
 # 本地快取檔案
-RECOMMENDATION_CACHE_FILE = "recommendation_cache.json"
+RECOMMENDATION_CACHE_FILE = os.path.join(BASE_DIR, "recommendation_cache.json")
 
 # 初始化快取檔案
 if not os.path.exists(RECOMMENDATION_CACHE_FILE):
@@ -60,7 +61,7 @@ def generate_diet_recommendation(nutrition_summary, goal="healthy"):
 
     # Gemini API 呼叫
     try:
-        model = genai.GenerativeModel("gemini-1.5-pro")
+        model = genai.GenerativeModel("gemini-1.5-pro")  # 更新為有效模型
         response = model.generate_content(
             prompt,
             generation_config={
