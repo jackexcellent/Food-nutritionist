@@ -37,7 +37,7 @@ def analyze_food(image_source, food_labels=None, is_url=True, threshold=0.05):
 
         # 模型推理
         device = "cuda" if torch.cuda.is_available() else "cpu"
-        with torch.no_grad():
+        with torch.no_grad():  # 不用梯度計算 節省資源
             outputs = image_model(**inputs.to(device))
         probs = outputs.logits.softmax(dim=1)
 
