@@ -69,7 +69,7 @@ pip install -r requirements.txt
 
 ```
 DISCORD_BOT_API_KEY=你的 Discord Bot Token
-GEMINI_API_KEY=你的 Groq API 金鑰
+GEMINI_API_KEY=你的 gemini API 金鑰
 # 其他必要金鑰...
 ```
 
@@ -99,7 +99,7 @@ python bot.py
 ## 重要說明 Notes
 
 - 圖像辨識使用 [nateraw/food](https://huggingface.co/nateraw/food) 預訓練模型
-- 須自備 Discord Bot Token、Groq API 金鑰
+- 須自備 Discord Bot Token、Gemini API 金鑰
 - 若有 API 限額建議使用快取檔案
 - 支援台灣常見飲食文化與本地化建議
 
