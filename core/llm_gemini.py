@@ -3,8 +3,8 @@ import os
 import google.generativeai as genai
 from dotenv import load_dotenv
 
-# 獲取當前腳本的目錄
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# 專案根目錄（即本檔案的上層目錄）
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # 載入環境變數
 env_file = os.path.join(BASE_DIR, "test.env" if os.path.exists(os.path.join(BASE_DIR, "test.env")) else ".env")
@@ -21,8 +21,8 @@ if not GEMINI_API_KEY:
 genai.configure(api_key=GEMINI_API_KEY)
 
 # 本地快取檔案
-RECOMMENDATION_CACHE_FILE = os.path.join(BASE_DIR, "recommendation_cache.json")
-QUESTION_CACHE_FILE = os.path.join(BASE_DIR, "question_cache.json")
+RECOMMENDATION_CACHE_FILE = os.path.join(BASE_DIR, "cache/recommendation_cache.json")
+QUESTION_CACHE_FILE = os.path.join(BASE_DIR, "cache/question_cache.json")
 
 # 初始化快取檔案
 if not os.path.exists(RECOMMENDATION_CACHE_FILE):
@@ -46,7 +46,6 @@ def generate_diet_recommendation(nutrition_summary, goal="healthy"):
     # 構建提示
     prompt = (
         "你是專精台灣飲食的營養師，使用繁體中文，語氣親切，適合台灣年輕人。根據以下餐點分析，提供100字內的飲食建議，"
-        "考慮台灣常見食物如滷肉飯、珍珠奶茶、牛肉麵，並避免高糖高脂飲食。\n"
         "餐點分析：\n"
     )
     for item in nutrition_summary:
