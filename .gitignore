@@ -1,2 +1,15 @@
-*.env
-test_gorq.py
+*.pyc
+
+__pycache__/
+
+.idea/
+.DS_Store
+
+# MS Office temporary files
+~$*
+
+# Environment variables
+.env
+
+# Local-only files
+*.local.*
