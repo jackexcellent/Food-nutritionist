@@ -1,7 +1,7 @@
 import discord
 import os
 from discord.ext import commands
-from core.discord_handler import register_commands
+from discord_handler import register_commands
 
 def main():
     intents = discord.Intents.default()
